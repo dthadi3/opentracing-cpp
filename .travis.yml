@@ -73,8 +73,6 @@ matrix:
     - MATRIX_EVAL="CC=gcc-4.8 && CXX=g++-4.8"
    
 before_install:
-  - eval "${MATRIX_EVAL}"
-  - ./ci/setup_${TRAVIS_OS_NAME}_environment.sh
   - | 
    if [[ "$TRAVIS_CPU_ARCH" == "ppc64le" ]]; then
      sudo apt install curl gnupg
@@ -84,6 +82,9 @@ before_install:
      sudo apt update && sudo apt install bazel
      sudo apt install openjdk-8-jdk
    fi
+  - eval "${MATRIX_EVAL}"
+  - ./ci/setup_${TRAVIS_OS_NAME}_environment.sh
+  
 script:
   - mkdir -p build
   - cd build
