@@ -75,6 +75,15 @@ matrix:
 before_install:
   - eval "${MATRIX_EVAL}"
   - ./ci/setup_${TRAVIS_OS_NAME}_environment.sh
+  - | 
+   if [[ "$TRAVIS_CPU_ARCH" == "ppc64le" ]]; then
+     sudo apt install curl gnupg
+     curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
+     sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
+     echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+     sudo apt update && sudo apt install bazel
+     sudo apt install openjdk-8-jdk
+   fi
 script:
   - mkdir -p build
   - cd build
